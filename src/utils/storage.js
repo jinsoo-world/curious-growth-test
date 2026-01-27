@@ -12,7 +12,7 @@ export async function saveTestData(userData, answers, resultType) {
   const testData = {
     id: Date.now().toString(),
     timestamp: new Date().toISOString(),
-    userName: userData?.name || null,
+    userName: userData?.name || userData?.nickname || null,
     phoneNumber: userData?.phone || null,
     answers: answers.map((answer, index) => {
       const question = questions[index];

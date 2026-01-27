@@ -2,8 +2,127 @@ import { useState, useEffect } from 'react'
 import { typeResults } from '../data/questions'
 import './ResultPage.css'
 
-function ResultPage({ type, onRestart }) {
+const deepReports = {
+  A: {
+    label: '🔥 A. 야망 있는 크리에이터',
+    subtitle: '인생 2막의 불꽃 슈팅스타',
+    tagline: '\"그동안 쌓아온 경험, 그냥 썩히긴 아깝잖아요? 이제 내 이름으로 한판 제대로 벌여봐야죠!\"',
+    sections: [
+      {
+        title: '어떤 마음이신가요?',
+        body: [
+          '손재주도 좋고, 아는 것도 많고, 무엇보다 \"한번 해보자!\" 하는 추진력이 끝내주는 분이에요.',
+          '이미 블로그, 유튜브, 글쓰기, 강의 등 이것저것 시도해보셨을 가능성이 큽니다.',
+          '하지만 마음 한구석엔 이런 질문이 떠오르죠. \"이왕 하는 거, 좀 더 그럴싸하게 수익도 내고 내 이름도 제대로 알리고 싶은데... 방법이 없을까?\"'
+        ]
+      },
+      {
+        title: '이런 고민, 다 알아요',
+        body: [
+          '열심히는 사는데, 성과가 눈에 확 보이지 않으면 금방 지치기 마련이에요.',
+          '\"이 나이에 너무 욕심부리나?\" 싶다가도, 내 능력을 인정받고 싶은 마음은 너무나 당연합니다.'
+        ]
+      },
+      {
+        title: '함께 해봐요',
+        body: [
+          '당신의 뜨거운 에너지가 헛되지 않도록 **돈이 되는 시스템**을 입혀드리는 것이 필요합니다.',
+          '복잡한 이론 대신, 당신의 아이디어가 근사한 결과물이 되어 세상에 알려지도록 돕는 구조가 중요해요.',
+          '이제 관객이 아니라 **주인공**으로 무대에 서볼 차례입니다.'
+        ]
+      }
+    ]
+  },
+  B: {
+    label: '⚡ B. 결정형 리더',
+    subtitle: '세상 돌아가는 이치에 밝은 지혜로운 회장님',
+    tagline: '\"복잡한 건 딱 질색! 핵심만 딱 짚어주면, 그다음부턴 제가 알아서 결정합니다.\"',
+    sections: [
+      {
+        title: '어떤 마음이신가요?',
+        body: [
+          '산전수전 다 겪어본 베테랑, 하나를 보면 열을 아는 안목을 가지신 분이에요.',
+          '당신에게 시간은 곧 돈이고, 직접 컴퓨터 앞에 앉아 씨름하기보다는 **이게 되는 일인지** 판단하고 방향을 잡는 데 강점이 있습니다.'
+        ]
+      },
+      {
+        title: '이런 고민, 다 알아요',
+        body: [
+          '\"내가 굳이 이걸 다 배워야 해? 잘하는 사람한테 시키는 게 빠르지!\"',
+          '맞아요. 하나부터 열까지 배우느라 힘 빼기보다는, 제대로 된 사람에게 맡기는 것이 훨씬 효율적인 타입입니다.'
+        ]
+      },
+      {
+        title: '함께 해봐요',
+        body: [
+          '시행착오로 버리는 시간을 줄이고, **알맹이만 담긴 맞춤형 가이드**가 필요합니다.',
+          '당신은 중요한 의사결정에만 집중하고, 실행과 세부 설계는 전문가에게 맡기는 방식이 가장 잘 맞습니다.'
+        ]
+      }
+    ]
+  },
+  C: {
+    label: '🌱 C. 성장 탐색자',
+    subtitle: '수줍지만 마음만은 낭만 가득한 모험가',
+    tagline: '\"시작이 반이라는데, 그 시작이 제일 어렵네요. 누가 옆에서 \'괜찮다\'고 손만 잡아주면 잘할 수 있을 것 같은데...\"',
+    sections: [
+      {
+        title: '어떤 마음이신가요?',
+        body: [
+          '배우고 싶은 것도 많고 호기심도 가득하지만, 남들 앞에 서는 건 괜히 쑥스럽고 망설여지시는군요.',
+          '\"내가 잘할 수 있을까?\", \"남들이 보면 웃지 않을까?\" 하는 걱정 때문에 시작을 자꾸 내일로 미루게 되셨을 수 있어요.'
+        ]
+      },
+      {
+        title: '이런 고민, 다 알아요',
+        body: [
+          '아직 준비가 안 된 게 아니라, 조금 더 따뜻하고 안전한 **응원과 환경**이 부족했을 뿐입니다.',
+          '완벽하게 해내야 한다는 부담감이 당신의 발걸음을 무겁게 만들었을 가능성이 커요.'
+        ]
+      },
+      {
+        title: '함께 해봐요',
+        body: [
+          '남들 눈치 보지 않아도 되는 작은 시도부터, 가볍게, 천천히 시작해보면 좋습니다.',
+          '아무도 흉보지 않는 편안한 공간에서 당신만의 속도로 걷다 보면, 어느새 부쩍 성장한 자신을 발견하게 될 거예요.',
+          '저희가 그 옆을 함께 걸어가는 **든든한 편**이 되어 드릴게요.'
+        ]
+      }
+    ]
+  },
+  D: {
+    label: '📘 D. 조용한 실력자',
+    subtitle: '깊은 산속 옹달샘 같은 내공의 고수',
+    tagline: '\"떠벌리는 건 체질에 안 맞아요. 하지만 내 인생이 담긴 소중한 기록 하나쯤은 남기고 싶네요.\"',
+    sections: [
+      {
+        title: '어떤 마음이신가요?',
+        body: [
+          '겉으로는 조용해 보이지만, 속에는 거대한 도서관이 들어있는 분이에요.',
+          '묵묵히 한 길을 걸어오며 쌓아온 당신만의 지혜와 철학은 정말 보물과도 같습니다.'
+        ]
+      },
+      {
+        title: '이런 고민, 다 알아요',
+        body: [
+          '\"내 경험이 책이 될까? 정리는 어떻게 해야 하지?\"',
+          '말로 하면 술술 나오지만, 막상 글과 결과물로 만들려니 어디서부터 손대야 할지 막막하셨을 거예요.'
+        ]
+      },
+      {
+        title: '함께 해봐요',
+        body: [
+          '억지로 자신을 드러내지 않아도 괜찮습니다. 대신 당신의 경험을 **격조 있는 자산**으로 남겨보는 건 어떨까요?',
+          '흩어진 조각들을 모아 한 권의 책, 혹은 품위 있는 결과물로 엮어내면, 굳이 말하지 않아도 사람들은 당신의 깊이를 알아보게 됩니다.'
+        ]
+      }
+    ]
+  }
+}
+
+function ResultPage({ type, nickname, onRestart }) {
   const result = typeResults[type]
+  const deep = deepReports[type]
   const [shareUrl, setShareUrl] = useState('')
   
   useEffect(() => {
@@ -48,6 +167,29 @@ function ResultPage({ type, onRestart }) {
     }
   }
   
+  const handleDownloadImage = async () => {
+    const target = document.querySelector('.result-container')
+    const html2canvas = window.html2canvas
+    if (!target || !html2canvas) {
+      alert('이미지 저장 기능을 지원하지 않는 환경입니다.')
+      return
+    }
+    
+    try {
+      const canvas = await html2canvas(target, {
+        backgroundColor: '#ffffff',
+        scale: window.devicePixelRatio > 1 ? 2 : 1.5
+      })
+      const link = document.createElement('a')
+      link.download = `curious-growth-result-${type}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+    } catch (error) {
+      console.error('이미지 저장 중 오류:', error)
+      alert('이미지 저장 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.')
+    }
+  }
+  
   return (
     <div className="result-page">
       <div className="result-container">
@@ -55,74 +197,49 @@ function ResultPage({ type, onRestart }) {
         <div className="result-header">
           <div className="result-emoji">{result.emoji}</div>
           <h1 className="result-title">
-            {result.emoji} {result.name}
+            {nickname ? `${nickname}님은` : '당신은'} {deep?.label || result.name} 유형이에요
           </h1>
+          {deep && (
+            <>
+              <p className="result-subtitle">[{deep.subtitle}]</p>
+              <p className="result-tagline">{deep.tagline}</p>
+            </>
+          )}
         </div>
         
-        {/* 현재 상태 */}
-        <section className="result-section">
-          <h2 className="section-title">당신의 현재 상태</h2>
-          <div className="section-content">
-            {result.currentState.map((line, index) => (
-              <p 
-                key={index} 
-                className="state-text"
-                dangerouslySetInnerHTML={{ 
-                  __html: line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
-                }}
-              />
+        {/* 디테일 리포트 */}
+        {deep && (
+          <section className="deep-report">
+            {deep.sections.map((section, index) => (
+              <div key={index} className="deep-section">
+                <h2 className="deep-section-title">{section.title}</h2>
+                {section.body.map((paragraph, i) => (
+                  <p
+                    key={i}
+                    className="deep-section-text"
+                    dangerouslySetInnerHTML={{
+                      __html: paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    }}
+                  />
+                ))}
+              </div>
             ))}
-          </div>
-        </section>
-        
-        {/* 고민 */}
-        <section className="result-section">
-          <h2 className="section-title">
-            혹시 이런 {type === 'B' ? '생각을 해본 적 있나요?' : type === 'C' ? '상황이 익숙하지 않나요?' : '고민이 있지 않으신가요?'}
-          </h2>
-          <div className="section-content">
-            <ul className="concerns-list">
-              {result.concerns.map((concern, index) => (
-                <li 
-                  key={index} 
-                  className="concern-item"
-                  dangerouslySetInnerHTML={{ 
-                    __html: concern.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
-                  }}
-                />
-              ))}
-            </ul>
-          </div>
-        </section>
-        
-        {/* 필요한 것 */}
-        <section className="result-section">
-          <h2 className="section-title">지금 가장 필요한 것</h2>
-          <div className="section-content">
-            <ul className="needs-list">
-              {result.needs.map((need, index) => (
-                <li 
-                  key={index} 
-                  className="need-item"
-                  dangerouslySetInnerHTML={{ 
-                    __html: need.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
-                  }}
-                />
-              ))}
-            </ul>
-          </div>
-        </section>
-        
-        {/* 추천 프로그램 */}
-        <section className="result-section recommendation-section">
-          <div className="recommendation-box">
-            <span className="recommendation-label">👉 추천 프로그램:</span>
-            <span className="recommendation-text">{result.recommendation}</span>
-          </div>
-        </section>
+          </section>
+        )}
         
         {/* 액션 버튼 */}
         <div className="result-actions">
+          <a 
+            className="curious-link-button"
+            href="https://go.curious-500.com/4qBxoNE"
+            target="_blank"
+            rel="noreferrer"
+          >
+            ☕ 큐리어스 대표와 상담하기
+          </a>
+          <button className="image-button" onClick={handleDownloadImage}>
+            🖼 결과를 이미지로 저장하기
+          </button>
           <button className="share-button" onClick={handleShare}>
             📤 친구에게 공유하기
           </button>

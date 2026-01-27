@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import StartPage from './components/StartPage'
 import QuestionPage from './components/QuestionPage'
-import UserInfoForm from './components/UserInfoForm'
 import ResultPage from './components/ResultPage'
 import AdminPage from './components/AdminPage'
 import { questions, calculateScores, determineType } from './data/questions'
@@ -12,7 +11,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('start')
   const [answers, setAnswers] = useState(new Array(questions.length).fill(null))
   const [resultType, setResultType] = useState(null)
-  const [userData, setUserData] = useState(null)
+  const [nickname, setNickname] = useState('')
   
   // URL 파라미터에서 결과 타입 읽기 (공유 링크용)
   useEffect(() => {
@@ -34,46 +33,26 @@ function App() {
     setAnswers(newAnswers)
   }
 
-  const handleComplete = () => {
+  const handleComplete = async (nicknameFromQuestion) => {
     const { scores, bKeyAnswers } = calculateScores(answers)
     const type = determineType(scores, bKeyAnswers)
     setResultType(type)
-    setCurrentPage('userinfo')
-  }
-
-  const handleUserInfoSubmit = async (data) => {
-    setUserData(data)
-    console.log('📝 사용자 정보 제출:', data);
-    console.log('📝 답변:', answers);
-    console.log('📝 결과 유형:', resultType);
-    // 데이터 저장
+    setNickname(nicknameFromQuestion || '')
+    
+    // 닉네임(선택)을 포함해 데이터 저장
     try {
-      await saveTestData(data, answers, resultType);
+      const userInfo = nicknameFromQuestion ? { nickname: nicknameFromQuestion } : null
+      await saveTestData(userInfo, answers, type);
       console.log('✅ saveTestData 완료');
     } catch (error) {
       console.error('❌ saveTestData 오류:', error);
     }
-    setCurrentPage('result')
-  }
-
-  const handleUserInfoSkip = async () => {
-    console.log('⏭️ 사용자 정보 건너뛰기');
-    console.log('📝 답변:', answers);
-    console.log('📝 결과 유형:', resultType);
-    // 정보 없이도 결과 보기 가능하지만 데이터는 저장
-    try {
-      await saveTestData(null, answers, resultType);
-      console.log('✅ saveTestData 완료');
-    } catch (error) {
-      console.error('❌ saveTestData 오류:', error);
-    }
-    setCurrentPage('result')
   }
 
   const handleRestart = () => {
     setAnswers(new Array(questions.length).fill(null))
     setResultType(null)
-    setUserData(null)
+    setNickname('')
     setCurrentPage('start')
   }
 
@@ -100,17 +79,13 @@ function App() {
           onAnswer={handleAnswer}
           onComplete={handleComplete}
           onBackToStart={handleRestart}
-        />
-      )}
-      {currentPage === 'userinfo' && resultType && (
-        <UserInfoForm
-          onSubmit={handleUserInfoSubmit}
-          onSkip={handleUserInfoSkip}
+          onShowResult={() => setCurrentPage('result')}
         />
       )}
       {currentPage === 'result' && resultType && (
         <ResultPage 
-          type={resultType} 
+          type={resultType}
+          nickname={nickname}
           onRestart={handleRestart}
           onBackToStart={handleRestart}
         />

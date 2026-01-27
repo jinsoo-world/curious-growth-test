@@ -1,6 +1,6 @@
 .result-page {
   min-height: 100vh;
-  background: var(--color-bg-light);
+  background: radial-gradient(circle at top, #E8F5E9 0, #FFFFFF 55%, #F1F8F4 100%);
   padding: var(--spacing-2xl) var(--spacing-md);
 }
 
@@ -17,7 +17,7 @@
   text-align: center;
   margin-bottom: var(--spacing-2xl);
   padding-bottom: var(--spacing-xl);
-  border-bottom: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border-light);
 }
 
 .result-emoji {
@@ -26,10 +26,56 @@
 }
 
 .result-title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--color-text);
   font-family: var(--font-heading);
+}
+
+.result-subtitle {
+  margin-top: var(--spacing-sm);
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+}
+
+.result-tagline {
+  margin-top: var(--spacing-md);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-primary-dark);
+}
+
+.deep-report {
+  margin-bottom: var(--spacing-2xl);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+}
+
+.deep-section {
+  background: #FAFAFA;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid #E0E0E0;
+}
+
+.deep-section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+  font-family: var(--font-heading);
+}
+
+.deep-section-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.deep-section-text:last-child {
+  margin-bottom: 0;
 }
 
 .result-section {
@@ -143,6 +189,42 @@
   gap: var(--spacing-md);
 }
 
+.curious-link-button {
+  display: inline-block;
+  text-decoration: none;
+  background: linear-gradient(90deg, var(--color-primary), #1B5E20);
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  border-radius: 999px;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.curious-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 150, 50, 0.35);
+}
+
+.image-button {
+  background: white;
+  color: var(--color-text);
+  font-size: 1.05rem;
+  font-weight: 500;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s ease;
+}
+
+.image-button:hover {
+  background: var(--color-bg-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
 .share-button {
   background: white;
   color: var(--color-primary);
@@ -209,6 +291,10 @@
   .concern-item,
   .need-item {
     font-size: 1rem;
+  }
+
+  .deep-section {
+    padding: var(--spacing-lg);
   }
   
   .recommendation-box {

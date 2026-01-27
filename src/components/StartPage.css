@@ -17,10 +17,22 @@
   margin-bottom: var(--spacing-xl);
 }
 
+.curious-logo-link {
+  display: inline-block;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.curious-logo-link:hover {
+  opacity: 0.8;
+  transform: scale(1.02);
+}
+
 .curious-logo-img {
   max-width: 300px;
   height: auto;
   margin-bottom: var(--spacing-lg);
+  display: block;
 }
 
 .curious-logo {
@@ -148,64 +160,6 @@
   margin-bottom: var(--spacing-2xl);
 }
 
-.steps-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-2xl);
-}
-
-.step-card {
-  background: white;
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-xl);
-  box-shadow: var(--shadow-md);
-  text-align: left;
-  position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.step-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
-}
-
-.step-badge {
-  display: inline-block;
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-md);
-  color: white;
-}
-
-.step-1 .step-badge {
-  background: var(--color-primary);
-}
-
-.step-2 .step-badge {
-  background: var(--color-primary);
-}
-
-.step-3 .step-badge {
-  background: var(--color-primary);
-}
-
-.step-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-md);
-  color: var(--color-text);
-}
-
-.step-description {
-  font-size: 1rem;
-  color: var(--color-text-light);
-  line-height: 1.8;
-  white-space: normal;
-}
-
 .start-button {
   background: var(--color-primary);
   color: white;
@@ -232,10 +186,6 @@
 @media (max-width: 768px) {
   .main-title {
     font-size: 2rem;
-  }
-  
-  .steps-section {
-    grid-template-columns: 1fr;
   }
   
   .start-page {

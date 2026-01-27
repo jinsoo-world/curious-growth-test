@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import './QuestionPage.css'
 
-function QuestionPage({ questions, answers, onAnswer, onComplete, onBackToStart }) {
+function QuestionPage({ questions, answers, onAnswer, onComplete, onBackToStart, onShowResult }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [showCover, setShowCover] = useState(true)
+  const [nickname, setNickname] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
   
   const currentQuestion = questions[currentQuestionIndex]
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100
@@ -16,13 +17,6 @@ function QuestionPage({ questions, answers, onAnswer, onComplete, onBackToStart 
   
   const handleAnswerSelect = (answerIndex) => {
     onAnswer(currentQuestionIndex, answerIndex)
-    
-    // 다음 질문으로 자동 이동
-    setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1)
-      }
-    }, 300)
   }
   
   const handleNext = () => {
@@ -37,24 +31,16 @@ function QuestionPage({ questions, answers, onAnswer, onComplete, onBackToStart 
     }
   }
   
-  const handleCoverStart = () => {
-    setShowCover(false)
-  }
-  
-  if (showCover) {
-    return (
-      <div className="cover-page">
-        <div className="cover-content">
-          <h2 className="cover-title">안내</h2>
-          <p className="cover-text">
-            다음 문항들은 공부·자기계발·새로운 시도 상황의 나를 떠올려 답해주세요!
-          </p>
-          <button className="cover-button" onClick={handleCoverStart}>
-            시작하기
-          </button>
-        </div>
-      </div>
-    )
+  const handleCompleteClick = () => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    // 닉네임과 함께 결과 계산 및 저장
+    onComplete(nickname)
+    // 살짝 연출을 준 뒤 결과 페이지로 이동
+    setTimeout(() => {
+      onShowResult()
+      setIsSubmitting(false)
+    }, 900)
   }
   
   return (
@@ -102,33 +88,52 @@ function QuestionPage({ questions, answers, onAnswer, onComplete, onBackToStart 
           </div>
         </div>
         
+        {/* 마지막 질문에서만 닉네임 입력 */}
+        {currentQuestionIndex === questions.length - 1 && (
+          <div className="nickname-section">
+            <label className="nickname-label">
+              마지막으로, 결과에서 불리고 싶은 이름(닉네임)을 적어주세요.
+            </label>
+            <input
+              type="text"
+              className="nickname-input"
+              placeholder="예: 홍길동, 길동님, 선생님, 닉네임 등"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+            <p className="nickname-hint">
+              입력은 선택 사항이에요. 비워두시면 이름 없이 결과가 보여져요.
+            </p>
+          </div>
+        )}
+        
         {/* 네비게이션 버튼 */}
         <div className="navigation-buttons">
-          <button
-            className="nav-button prev-button"
-            onClick={handlePrev}
-            disabled={currentQuestionIndex === 0}
-          >
-            이전
-          </button>
-          
           {currentQuestionIndex < questions.length - 1 ? (
             <button
               className="nav-button next-button"
               onClick={handleNext}
-              disabled={answers[currentQuestionIndex] === null}
+              disabled={answers[currentQuestionIndex] === null || isSubmitting}
             >
               다음
             </button>
           ) : (
             <button
               className="nav-button complete-button"
-              onClick={onComplete}
-              disabled={!allAnswered}
+              onClick={handleCompleteClick}
+              disabled={!allAnswered || isSubmitting}
             >
               결과 보기
             </button>
           )}
+          
+          <button
+            className="nav-button prev-button"
+            onClick={handlePrev}
+            disabled={currentQuestionIndex === 0 || isSubmitting}
+          >
+            이전
+          </button>
         </div>
         
         {/* 질문 인디케이터 */}
@@ -137,11 +142,20 @@ function QuestionPage({ questions, answers, onAnswer, onComplete, onBackToStart 
             <button
               key={index}
               className={`indicator ${index === currentQuestionIndex ? 'active' : ''} ${answers[index] !== null ? 'answered' : ''}`}
-              onClick={() => setCurrentQuestionIndex(index)}
+              onClick={() => !isSubmitting && setCurrentQuestionIndex(index)}
             />
           ))}
         </div>
       </div>
+      
+      {isSubmitting && (
+        <div className="submit-overlay">
+          <div className="submit-card">
+            <div className="submit-check">✓</div>
+            <p className="submit-text">응답을 정리하고 있어요...</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
